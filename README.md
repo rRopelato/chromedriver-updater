@@ -1,15 +1,21 @@
-# ChromeDriver Updater
+# ChromeDriver Updater 🚀
 
-## What is ChromeDriver Updater?
-ChromeDriver Updater is a program that automatically updates ChromeDriver, for use with the Selenium Basic program created by dev [@florentbr](https://github.com/florentbr)
-It updates automatically using Python and Selenium, the program generates a log in the Downloads folder in case there is an error.
+## What is ChromeDriver Updater? 🔄
+ChromeDriver Updater is a convenient program designed to automatically update ChromeDriver for seamless integration with the Selenium Basic program, created by dev [@florentbr](https://github.com/florentbr). The updating process is handled automatically using Python and Selenium, with the program generating a log in the Downloads folder in case of errors.
 
-## Why I made it?
+## Why I made it? 🤔
+I developed this tool out of necessity. As a frequent user of Selenium Basic, manually managing ChromeDriver updates became a tedious task that I wanted to automate.
 
-I made it because i use Selenium Basic a lot, and it sucks to keep the ChromeDriver updated.
+## 🌟 Releases (Download)
 
-## Credits
+While it's fully functional, I'm constantly tweaking and striving for a polished HUD.
 
-The author from this project is Renan Ropelato, a Brazilian developer.
+> [Download ChromeDriver Updater](https://github.com/rRopelato/chromedriver-updater/releases)
 
-You can contact me on Discord (rropelato [220701036929613825]), e-mail (r.ropelato@proton.me) or through my LinkedIn https://www.linkedin.com/in/renan-ropelato/.
+
+## Credits 🙌
+The author of this project is Renan Ropelato, a passionate Brazilian developer.
+
+You can reach out to me on Discord (rropelato [220701036929613825]), via e-mail (r.ropelato@proton.me), or through my [LinkedIn](https://www.linkedin.com/in/renan-ropelato/).
+
+Feel free to adjust it further or let me know if there's anything specific you'd like to modify!
