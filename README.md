@@ -8,7 +8,7 @@ I developed this tool out of necessity. As a frequent user of Selenium Basic, ma
 
 ## 🌟 Releases (Download)
 
-While it's fully functional, I'm constantly tweaking and striving for a polished HUD.
+While it's fully functional, I'm constantly tweaking and striving for a polished GUI.
 
 > [Download ChromeDriver Updater](https://github.com/rRopelato/chromedriver-updater/releases)
 
