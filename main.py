@@ -5,104 +5,136 @@ import shutil
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import customtkinter as CTK
+import webbrowser
 
-current_datetime = datetime.now()
+CTK.set_appearance_mode("System")
+CTK.set_default_color_theme("blue")
 
-datetime_str = current_datetime.strftime("%Y-%m-%d_%H-%M-%S")
+app = CTK.CTk()
+app.geometry("500x250")
+app.title("Chrome Driver Updater")
 
-log_file_path = os.path.join(os.path.expanduser("~"), "Downloads", f"script_log_{datetime_str}.txt")
+titulo_font = CTK.CTkFont(family="Helvetica", size=26, weight="bold")
+titulo_label = CTK.CTkLabel(app, text="ChromeDriver Updater", font=titulo_font)
+titulo_label.pack(pady=20)
 
-def log_and_print(message):
-    print(message)
+def atualizar_chromedriver():
+    current_datetime = datetime.now()
+
+    datetime_str = current_datetime.strftime("%Y-%m-%d_%H-%M-%S")
+
+    log_file_path = os.path.join(os.path.expanduser("~"), "Downloads", f"script_log_{datetime_str}.txt")
+
+    def log_and_print(message):
+        print(message)
+        with open(log_file_path, "a") as log_file:
+            log_file.write(message + "\n")
+
+    file_to_delete = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64.zip")
+
+    if os.path.exists(file_to_delete):
+        os.remove(file_to_delete)
+        log_and_print(f"Arquivo {file_to_delete} excluído.")
+    else:
+        log_and_print("O arquivo não existe. Nenhuma exclusão necessária.")
+
+    driver = webdriver.Chrome()
+    driver.get("https://googlechromelabs.github.io/chrome-for-testing/#stable")
+
+    xpath = "/html/body/section[1]/div[1]/table/tbody/tr[10]/td[1]"
+
+    element_with_link = driver.find_element("xpath", xpath)
+
+    link_text = element_with_link.text
+
+    driver.execute_script("window.open('about:blank', '_blank');")
+
+    driver.switch_to.window(driver.window_handles[1])
+
+    driver.get(link_text)
+
+    max_wait_time = 300
+
+    start_time = time.time()
+
+    while time.time() - start_time < max_wait_time:
+        file_path = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64.zip")
+        
+        if os.path.exists(file_path):
+            log_and_print("O download foi concluído.")
+            break
+        else:
+            log_and_print("Aguardando o download...")
+            time.sleep(1)
+
+    else:
+        log_and_print("O download não foi concluído dentro do tempo máximo.")
+
+    zip_file_path = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64.zip")
+
+    extracted_folder_path = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64")
+
+    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+        zip_ref.extractall(extracted_folder_path)
+
+    log_and_print(f"Arquivo {zip_file_path} extraído para {extracted_folder_path}.")
+
+    selenium_basic_path = os.path.join(os.path.expanduser("~"), "AppData", "Local", "SeleniumBasic")
+    files_to_delete = ["chromedriver.exe", "LICENSE.chromedriver"]
+
+    for file_name in files_to_delete:
+        file_path = os.path.join(selenium_basic_path, file_name)
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            log_and_print(f"Arquivo {file_name} excluído em {selenium_basic_path}.")
+        else:
+            log_and_print(f"O arquivo {file_name} não existe em {selenium_basic_path}. Nenhuma exclusão necessária.")
+
+    extracted_folder_path = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64", "chromedriver-win64")
+
+    destination_path = os.path.join(os.path.expanduser("~"), "AppData", "Local", "SeleniumBasic")
+
+    shutil.copytree(extracted_folder_path, destination_path, dirs_exist_ok=True)
+    log_and_print(f"Arquivos copiados de {extracted_folder_path} para {destination_path}.")
+
+    folder_to_delete = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64")
+
+    zip_file_path = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64.zip")
+
+    if os.path.exists(folder_to_delete):
+        shutil.rmtree(folder_to_delete)
+        log_and_print(f"Pasta {folder_to_delete} excluída.")
+    else:
+        log_and_print(f"A pasta {folder_to_delete} não existe. Nenhuma exclusão necessária.")
+
+    if os.path.exists(zip_file_path):
+        os.remove(zip_file_path)
+        log_and_print(f"Arquivo {zip_file_path} excluído.")
+    else:
+        log_and_print(f"O arquivo {zip_file_path} não existe. Nenhuma exclusão necessária.")
+
     with open(log_file_path, "a") as log_file:
-        log_file.write(message + "\n")
+        log_file.write("Script concluído.")
 
-file_to_delete = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64.zip")
+    log_and_print(f"Processo totalmente encerrado.")
 
-if os.path.exists(file_to_delete):
-    os.remove(file_to_delete)
-    log_and_print(f"Arquivo {file_to_delete} excluído.")
-else:
-    log_and_print("O arquivo não existe. Nenhuma exclusão necessária.")
+    driver.quit()
 
-driver = webdriver.Chrome()
-driver.get("https://googlechromelabs.github.io/chrome-for-testing/#stable")
+botao_font = CTK.CTkFont(family="Helvetica", size=16)
+botao_atualizar = CTK.CTkButton(app, text="Update", command=atualizar_chromedriver, font=botao_font)
+botao_atualizar.pack(pady=20)
 
-xpath = "/html/body/section[1]/div[1]/table/tbody/tr[10]/td[1]"
+texto_font = CTK.CTkFont(family="Helvetica", size=12)
+texto_link = CTK.CTkLabel(app, text="Made by: ", font=texto_font)
+texto_link.pack()
 
-element_with_link = driver.find_element("xpath", xpath)
+def open_github(event):
+    webbrowser.open_new("https://github.com/rRopelato")
 
-link_text = element_with_link.text
+link_font = CTK.CTkFont(family="Helvetica", size=12, underline=True)
+link_label = CTK.CTkLabel(app, text="rRopelato", font=link_font, cursor="hand2")
+link_label.pack(pady=5)
+link_label.bind("<Button-1>", open_github)
 
-driver.execute_script("window.open('about:blank', '_blank');")
-
-driver.switch_to.window(driver.window_handles[1])
-
-driver.get(link_text)
-
-max_wait_time = 300
-
-start_time = time.time()
-
-while time.time() - start_time < max_wait_time:
-    file_path = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64.zip")
-    
-    if os.path.exists(file_path):
-        log_and_print("O download foi concluído.")
-        break
-    else:
-        log_and_print("Aguardando o download...")
-        time.sleep(1)
-
-else:
-    log_and_print("O download não foi concluído dentro do tempo máximo.")
-
-zip_file_path = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64.zip")
-
-extracted_folder_path = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64")
-
-with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-    zip_ref.extractall(extracted_folder_path)
-
-log_and_print(f"Arquivo {zip_file_path} extraído para {extracted_folder_path}.")
-
-selenium_basic_path = os.path.join(os.path.expanduser("~"), "AppData", "Local", "SeleniumBasic")
-files_to_delete = ["chromedriver.exe", "LICENSE.chromedriver"]
-
-for file_name in files_to_delete:
-    file_path = os.path.join(selenium_basic_path, file_name)
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        log_and_print(f"Arquivo {file_name} excluído em {selenium_basic_path}.")
-    else:
-        log_and_print(f"O arquivo {file_name} não existe em {selenium_basic_path}. Nenhuma exclusão necessária.")
-
-extracted_folder_path = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64", "chromedriver-win64")
-
-destination_path = os.path.join(os.path.expanduser("~"), "AppData", "Local", "SeleniumBasic")
-
-shutil.copytree(extracted_folder_path, destination_path, dirs_exist_ok=True)
-log_and_print(f"Arquivos copiados de {extracted_folder_path} para {destination_path}.")
-
-folder_to_delete = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64")
-
-zip_file_path = os.path.join(os.path.expanduser("~"), "Downloads", "chromedriver-win64.zip")
-
-if os.path.exists(folder_to_delete):
-    shutil.rmtree(folder_to_delete)
-    log_and_print(f"Pasta {folder_to_delete} excluída.")
-else:
-    log_and_print(f"A pasta {folder_to_delete} não existe. Nenhuma exclusão necessária.")
-
-if os.path.exists(zip_file_path):
-    os.remove(zip_file_path)
-    log_and_print(f"Arquivo {zip_file_path} excluído.")
-else:
-    log_and_print(f"O arquivo {zip_file_path} não existe. Nenhuma exclusão necessária.")
-
-with open(log_file_path, "a") as log_file:
-    log_file.write("Script concluído.")
-
-log_and_print(f"Processo totalmente encerrado.")
-
-driver.quit()
+app.mainloop()
