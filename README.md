@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# chromedriver-updater
-# chromedriver-updater
-# chromedriver-updater
-=======
 # ChromeDriver Updater 🚀
 
 ## What is ChromeDriver Updater? 🔄
@@ -24,4 +19,3 @@ The author of this project is Renan Ropelato, a passionate Brazilian developer.
 You can reach out to me on Discord (rropelato [220701036929613825]), via e-mail (r.ropelato@proton.me), or through my [LinkedIn](https://www.linkedin.com/in/renan-ropelato/).
 
 Feel free to adjust it further or let me know if there's anything specific you'd like to modify!
->>>>>>> 2a4e676f6c712b71869bc2714d1acb03b4b59796
